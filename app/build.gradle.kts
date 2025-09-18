@@ -3,7 +3,14 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1"
 
+
+}
+buildscript {
+    dependencies {
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+    }
 }
 
 android {
@@ -59,6 +66,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,4 +78,13 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("com.google.firebase:firebase-database-ktx:20.3.1")
+
+
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
+
+
+
+
 }
