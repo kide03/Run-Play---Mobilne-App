@@ -83,6 +83,8 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:4.4.1")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
     implementation ("com.google.android.gms:play-services-location:21.3.0")
+    implementation ("io.coil-kt:coil-compose:2.6.0")
+    implementation ("com.cloudinary:cloudinary-android:3.0.2")
 
 
 

@@ -18,8 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.myapplication1.AuthViewModel
-import com.example.myapplication1.Map
+import com.example.myapplication1.viewmodel.AuthViewModel
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +31,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.myapplication1.LocationForegroundService
-import com.example.myapplication1.MainActivity
 import com.example.myapplication1.MapWithForeground
 import com.example.myapplication1.Timer
 
@@ -67,82 +65,83 @@ fun HomePage (modifier: Modifier = Modifier, navController: NavController, authV
 LaunchedEffect(Unit) { locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION) }
 
 
-
+Box(modifier = Modifier)
+{
     Column(
-            modifier = modifier.fillMaxSize()
-                .background(Color(0xFF34ADBB)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        modifier = modifier.fillMaxSize()
+            .background(Color(0xFF34ADBB)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-            Text(text = "Home Page", fontSize = 32.sp)
+        Text(text = "Home Page", fontSize = 32.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (state != TimerState.Idle) {
+            Text(text = time, fontSize = 24.sp)
             Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            if (state != TimerState.Idle) {
-                Text(text = time)
-                Spacer(modifier = Modifier.height(16.dp))
+
+
+
+        when (state) {
+            TimerState.Idle -> {
+                Button(onClick = {
+
+                    timer.start()
+
+                    state = TimerState.Running
+                }) {
+                    Text("Start Run")
+                }
             }
 
 
+            TimerState.Running -> {
+                Button(onClick = {
+                    timer.pause()
+                    state = TimerState.Paused
 
 
-                when(state) {
-                    TimerState.Idle -> {
-                        Button(onClick = {
-
-                            timer.start()
-
-                            state = TimerState.Running
-                        }) {
-                            Text("Start Run")
-                        }
-                    }
-
-
-                    TimerState.Running -> {
-                        Button(onClick = {
-                            timer.pause()
-                            state = TimerState.Paused
-
-
-
-                        }) {
-                            Text("Pause")
-                        }
-
-                    }
-
-                    TimerState.Paused ->
-                        {
-
-                            Row {
-
-                                Button(onClick = {
-                                    timer.start()
-                                    state = TimerState.Running
-
-                                })
-                                {
-                                    Text("Continue")
-                                }
-                                Spacer(modifier = Modifier.width(16.dp))
-
-                                Button(onClick = {
-                                    timer.finish()
-                                    state = TimerState.Idle
-
-                                })
-                                {
-                                    Text("Finish")
-                                }
-                            }
-                    }
+                }) {
+                    Text("Pause")
                 }
 
-            MapWithForeground(context)
+            }
 
+            TimerState.Paused -> {
 
+                Row {
+
+                    Button(onClick = {
+                        timer.start()
+                        state = TimerState.Running
+
+                    })
+                    {
+                        Text("Continue")
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(onClick = {
+                        timer.finish()
+                        state = TimerState.Idle
+
+                    })
+                    {
+                        Text("Finish")
+                    }
+                }
+            }
         }
+
+        MapWithForeground(context)
+
+
+    }
+
+}
     }
 
 

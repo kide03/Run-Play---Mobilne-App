@@ -1,7 +1,10 @@
 package com.example.myapplication1.pages
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.myapplication1.AuthState
-import com.example.myapplication1.AuthViewModel
+import com.example.myapplication1.viewmodel.AuthState
+import com.example.myapplication1.viewmodel.AuthViewModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +33,28 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-
+import androidx.compose.ui.res.painterResource
+import com.example.myapplication1.R
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
+import coil.compose.rememberAsyncImagePainter
+import androidx.compose.ui.layout.ContentScale
+import com.example.myapplication1.viewmodel.ProfileViewModel
 
 
 @Composable
-fun ProfilePage(modifier: Modifier,navController: NavController,authViewModel: AuthViewModel)
+fun ProfilePage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel,
+                profileViewModel: ProfileViewModel
+)
 {
+    val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+    if (uid != null) {
+        profileViewModel.loadProfileImageUrl(uid)
+    }
 
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
@@ -76,25 +95,62 @@ fun ProfilePage(modifier: Modifier,navController: NavController,authViewModel: A
             }
     }
 
+
+
+
 Box(
     modifier = modifier.fillMaxSize()
         .background(Color(0xFF34ADBB))
 
-
 )
 {
-    Text(text = "Your profile", fontSize = 32.sp, modifier = modifier.align(Alignment.TopCenter))
+    Text(text = "Your profile", fontSize = 36.sp, modifier = modifier.align(Alignment.TopCenter))
+    }
 
 
+    val profileImageUrl = profileViewModel.profileImageUrl.value
+    Box(modifier = modifier) {
 
+        if(profileImageUrl != null) {
+            Image(
+                painter = rememberAsyncImagePainter(profileImageUrl),
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(10.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        }
+        else{
+            Image(
+                painter = painterResource(id = R.drawable.blank_profile_picture),
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(10.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop)
+        }
+        Image(
+            painter = painterResource(id = R.drawable.camera),
+            contentDescription = null,
+            modifier = Modifier
+                .alpha(0.4f)
+                .align(Alignment.BottomEnd)
+                .size(30.dp)
+                .clip(CircleShape)
+                .clickable { navController.navigate("pickPicture") }
+        )
 
+    }
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(120.dp))
         Row(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp ),
             horizontalArrangement = Arrangement.Start,
@@ -115,6 +171,7 @@ Box(
             Text(text = surname)
 
 
+
         }
         Row(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp ),
@@ -128,29 +185,38 @@ Box(
 
         }
 
+        Spacer(modifier = Modifier.height(14.dp))
         Text(text = "This month fruit collected: $numOfFruitMonthly",
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp))
 
         Text(text = "Total fruit collected: $numOfFruitTotal",
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp))
+
+    }
 
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Column( modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+
         TextButton(onClick = {
             authViewModel.signout()
         },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = Color.White,
                 containerColor = Color(0xFF3F51B5)
-            )
+            ),
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 14.dp)
+
+
+
         ) {
-            Text(text = "Sign out")
+            Text(text = "Sign out", fontSize = 20.sp)
         }
 
-
-
-
+    }
 
     }
-}
-}
+
+

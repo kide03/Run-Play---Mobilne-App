@@ -1,19 +1,22 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.myapplication1.AuthViewModel
+import com.example.myapplication1.pages.LeaderboardPage
+import com.example.myapplication1.viewmodel.AuthViewModel
 import com.example.myapplication1.pages.LogInPage
+import com.example.myapplication1.pages.PickPicture
 import com.example.myapplication1.pages.SingUpPage
 import com.example.myapplication1.pages.ProfilePage
-import com.example.myapplication1.pages.RangListPage
+import com.example.myapplication1.pages.LeaderboardPage
+import com.example.myapplication1.viewmodel.ProfileViewModel
 
 
 @Composable
-fun MyNavigation(modifier: Modifier = Modifier,authViewModel: AuthViewModel,navController: NavHostController) {
+fun MyNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navController: NavHostController,
+                 ProfileViewModel: ProfileViewModel
+) {
 
 
     NavHost(navController = navController, startDestination="login", builder = {
@@ -28,11 +31,14 @@ fun MyNavigation(modifier: Modifier = Modifier,authViewModel: AuthViewModel,navC
         }
 
         composable(route= "profile"){
-            ProfilePage(modifier,navController,authViewModel)
+            ProfilePage(modifier,navController,authViewModel,ProfileViewModel)
         }
 
-        composable(route= "ranglist"){
-            RangListPage(modifier,navController)
+        composable(route= "leaderboard"){
+            LeaderboardPage(modifier,navController)
+        }
+        composable(route= "pickPicture"){
+            PickPicture(modifier,navController, ProfileViewModel )
         }
     })
 }

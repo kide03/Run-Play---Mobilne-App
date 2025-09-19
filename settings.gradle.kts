@@ -8,6 +8,8 @@ pluginManagement {
             }
         }
         mavenCentral()
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+        maven { url = uri("https://github.com/linkedin/LiTr/raw/master/maven-repo") }
         gradlePluginPortal()
     }
 }
@@ -16,6 +18,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+        maven { url = uri("https://github.com/linkedin/LiTr/raw/master/maven-repo") }
     }
 }
 

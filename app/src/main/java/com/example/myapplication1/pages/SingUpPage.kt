@@ -24,8 +24,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.myapplication1.AuthState
-import com.example.myapplication1.AuthViewModel
+import com.example.myapplication1.viewmodel.AuthState
+import com.example.myapplication1.viewmodel.AuthViewModel
 
 @Composable
 fun SingUpPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {

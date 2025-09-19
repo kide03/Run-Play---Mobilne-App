@@ -1,4 +1,4 @@
-package com.example.myapplication1
+package com.example.myapplication1.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,7 +46,8 @@ class AuthViewModel:ViewModel() {
                     _authState.value = AuthState.Authenticated
                 }
                 else{
-                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
 
             }
@@ -90,7 +91,8 @@ class AuthViewModel:ViewModel() {
 
                 }
                 else{
-                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
 
             }
@@ -98,7 +100,7 @@ class AuthViewModel:ViewModel() {
 
     fun signout(){
         auth.signOut()
-        _authState.value =AuthState.Unauthenticated
+        _authState.value = AuthState.Unauthenticated
     }
 
 
@@ -106,9 +108,9 @@ class AuthViewModel:ViewModel() {
 }
 
 sealed class AuthState{
-    object Authenticated:AuthState()
-    object Unauthenticated:AuthState()
-    object Loading:AuthState()
+    object Authenticated: AuthState()
+    object Unauthenticated: AuthState()
+    object Loading: AuthState()
     data class Error(val message:String): AuthState()
 
 }
